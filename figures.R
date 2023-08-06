@@ -27,3 +27,21 @@ fig <- dat |>
 
 
 ggsave("figure_poc_core_agreement.png", fig, width = 9, height = 6)
+
+
+dat |>
+  filter(between(core_glucose, 30, 600), between(delta_offset, -15, 15), !is.na(hemoglobin)) |>
+  mutate(hgb_group = cut_interval(hemoglobin, 5)) |>
+  ggplot(aes(delta_glucose, color = hgb_group)) + 
+    geom_density()
+
+dat |>
+  filter(between(core_glucose, 30, 600), between(delta_offset, -15, 15), !is.na(hemoglobin)) |>
+  mutate(hgb_group = cut_interval(hemoglobin, 5)) |>
+  group_by(hgb_group) |>
+  summarise(mean = mean(delta_glucose), sd = sd(delta_glucose))
+
+dat |>
+  filter(between(core_glucose, 30, 600), between(delta_offset, -15, 15), !is.na(hemoglobin)) |>
+  group_by(ethnicity) |>
+  summarise(mean = mean(delta_glucose), sd = sd(delta_glucose))
